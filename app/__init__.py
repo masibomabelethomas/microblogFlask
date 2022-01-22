@@ -1,13 +1,13 @@
-import os
 from flask import Flask
-# from config import app_config
-# I need to tell Flask to read it and apply it. 
-# That can be done right after the Flask application 
-# instance is created using the
-#  app.config.from_object() method:
-app = Flask(__name__, template_folder="../templates")
+from app.config import Config
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', default='dvasuygasVOIUB')
-# app.config.from_object(app_config["development"])
-#
-from app.views import views
+app = Flask(__name__, template_folder="../templates")
+app.config.from_object(Config)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+from app.models import models  # noqa
+
+from app.views import views  # noqa
